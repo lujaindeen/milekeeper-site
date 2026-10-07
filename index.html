@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html data-theme="route" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Mile Keeper - rental bills for one car, offline</title>
+<meta content="Mile Keeper is a free Android app for car rental owners. Record the odometer, work out the bill in LKR and share a PDF on WhatsApp. Works offline." name="description"/>
+<meta content="Mile Keeper - rental bills for one car, offline" property="og:title"/>
+<meta content="Record the odometer, work out the bill in LKR, share a PDF on WhatsApp. Free Android app. No account, works offline." property="og:description"/>
+<style>
+:root{--bg:#f4f8fd;--card:#fff;--ink:#0f2347;--muted:#51627f;--accent:#1f6feb;--accent-ink:#fff;--hero:#0f2347;--hero-ink:#fff;--hero-muted:#b9c8e3;--line:#dbe5f2;--soft:#e8f0fb;--radius:16px}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+a{color:var(--accent)}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.mk{width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:14px;letter-spacing:.5px}
+nav a.tt{font-size:14px;text-decoration:none;color:var(--hero-muted);font-weight:600}
+.hero{background:var(--hero);color:var(--hero-ink)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:28px 0 64px}
+h1{font-size:46px;line-height:1.08;margin:0 0 16px;letter-spacing:-.02em}
+.lead{font-size:19px;color:var(--hero-muted);margin:0 0 28px;max-width:30em}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:18px;padding:16px 26px;border-radius:14px;text-decoration:none;box-shadow:0 6px 18px rgba(31,111,235,.35)}
+.btn svg{width:22px;height:22px}
+.meta{margin-top:14px;font-size:14px;color:var(--hero-muted)}
+.bill{background:#fff;color:#14233f;border-radius:14px;padding:22px 24px;box-shadow:0 24px 50px rgba(0,0,0,.28);position:relative;max-width:360px;margin-left:auto;transform:rotate(1.2deg)}
+.bill .top{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #14233f;padding-bottom:10px;margin-bottom:12px}
+.bill .top b{font-size:15px}.bill .top span{font-size:12px;color:#5b6b86}
+.bill table{width:100%;border-collapse:collapse;font-size:14px}
+.bill td{padding:7px 0;border-bottom:1px solid #e3e9f3}.bill td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.bill .tot td{font-weight:800;border-bottom:0;font-size:16px;padding-top:12px}
+.stamp{position:absolute;right:18px;bottom:20px;border:3px solid #1a8f4d;color:#1a8f4d;font-weight:800;font-size:15px;padding:3px 10px;border-radius:6px;transform:rotate(-10deg);letter-spacing:1px;opacity:.85}
+.cap{font-size:12px;color:var(--hero-muted);text-align:right;margin-top:14px;max-width:360px;margin-left:auto}
+section{padding:60px 0 8px}
+h2{font-size:28px;margin:0 0 8px;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0 0 28px;max-width:38em}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.card h3{margin:0 0 6px;font-size:17px}.card p{margin:0;color:var(--muted);font-size:15px}
+.ic{width:38px;height:38px;border-radius:10px;background:var(--soft);display:grid;place-items:center;margin-bottom:12px;font-size:19px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;counter-increment:s}
+.step:before{content:counter(s);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:700;margin-bottom:10px}
+.step h3{margin:0 0 4px;font-size:17px}.step p{margin:0;color:var(--muted);font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+ul.tick,ul.dash{margin:0;padding:0;list-style:none}
+ul.tick li,ul.dash li{padding:6px 0 6px 28px;position:relative;font-size:15px}
+ul.tick li:before{content:"\2713";position:absolute;left:0;color:#1a8f4d;font-weight:800}
+ul.dash li:before{content:"\2013";position:absolute;left:4px;color:var(--muted)}
+.card h3.t{margin-bottom:10px}
+ol.inst{margin:0;padding-left:20px;font-size:15px}ol.inst li{padding:4px 0}
+.cta{text-align:center;padding:56px 0}
+.cta .btn{margin-top:6px}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+@media(max-width:760px){.hero-grid,.two,.grid,.steps{grid-template-columns:1fr}h1{font-size:34px}.bill,.cap{margin-left:0}}
+
+.nav-tools{display:flex;align-items:center;gap:18px}.lang-toggle{display:flex;border:1px solid #62738f;border-radius:9px;padding:3px;gap:3px}.lang-toggle button{font:inherit;font-size:14px;font-weight:700;min-width:44px;min-height:40px;padding:6px 10px;border:0;border-radius:6px;background:transparent;color:#d4e0f4;cursor:pointer}.lang-toggle button[aria-pressed=true]{background:#fff;color:#0f2347}.lang-toggle button:focus-visible{outline:3px solid #65a8ff;outline-offset:3px}
+html[lang=si] body{font-family:"Noto Sans Sinhala",system-ui,sans-serif;line-height:1.8}html[lang=si] h1{font-size:40px;line-height:1.45;letter-spacing:0}html[lang=si] h2,html[lang=si] h3{line-height:1.65;letter-spacing:0}html[lang=si] .bill{max-width:390px;transform:none}html[lang=si] .bill td{vertical-align:top}html[lang=si] .bill td:last-child{white-space:nowrap;padding-left:10px}html[lang=si] .stamp{font-size:13px;letter-spacing:0}html[lang=si] .btn{font-size:16px;line-height:1.7}html[lang=si] .lead{font-size:18px}
+@media(max-width:760px){nav{flex-wrap:wrap;gap:14px}.nav-tools{gap:12px}.tt{font-size:12px!important}html[lang=si] h1{font-size:30px}.hero-grid{padding-top:20px}.bill{width:100%}.btn{padding:16px 20px}html[lang=si] .brand{font-family:system-ui,sans-serif}.bill table{font-size:13px}.bill .tot td{font-size:14px}}
+@media(max-width:400px){.nav-tools{width:100%;justify-content:space-between}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<nav>
+<div class="brand"><div class="mk">MK</div>Mile Keeper</div>
+<div class="nav-tools"><a class="tt" href="mailto:lujain888@gmail.com">lujain888@gmail.com</a><div aria-label="Language / භාෂාව" class="lang-toggle" role="group"><button aria-pressed="true" data-lang="en" lang="en" type="button">EN</button><button aria-pressed="false" data-lang="si" lang="si" type="button">සිං</button></div></div></nav>
+<div class="hero-grid">
+<div>
+<h1 data-i18n="t0">Stop writing vehicle rental bills by hand.</h1>
+<p class="lead" data-i18n="t1">Mile Keeper records the odometer, works out the charge in LKR and gives you a clean PDF bill to send on WhatsApp. It runs fully offline on your Android phone.</p>
+<a class="btn" href="https://github.com/lujaindeen/milekeeper-site/releases/latest/download/Mile-Keeper.apk" id="dl"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14"></path></svg><span data-i18n="t2">Download for Android (APK)</span></a>
+<div class="meta" data-i18n="t4">Free · Version 3.7.0 · Android 8.0 or newer · No account needed</div>
+</div>
+<div>
+<div aria-label="Sample bill" class="bill">
+<div class="top"><b data-i18n="t5">Rental Invoice</b><span>MK-000042</span></div>
+<table>
+<tr><td data-i18n="t6">Days (3 x LKR 5,500)</td><td>LKR 16,500</td></tr>
+<tr><td data-i18n="t7">Extra km (35 km x LKR 20)</td><td>LKR 700</td></tr>
+<tr class="tot"><td data-i18n="t8">Total</td><td>LKR 17,200</td></tr>
+<tr><td data-i18n="t9">Paid</td><td>LKR 17,200</td></tr>
+</table>
+<div class="stamp" data-i18n="t10">PAID IN FULL</div>
+<div style="height:52px"></div>
+</div>
+<div class="cap" data-i18n="t11">Sample bill with example numbers. Rates are set by you in the app.</div>
+</div>
+</div>
+</div>
+</header>
+<div class="wrap">
+<section>
+<h2 data-i18n="t12">What it does</h2>
+<p class="sub" data-i18n="t16">Built for an owner renting out one car. It does a few things and does them properly.</p>
+<div class="grid">
+<div class="card"><div class="ic"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" style="color:var(--accent)" viewbox="0 0 24 24" width="22"><path d="M3 14l2-5a2 2 0 012-1h10a2 2 0 012 1l2 5v4h-2v-2H5v2H3z"></path><circle cx="7.5" cy="13.5" r="1"></circle><circle cx="16.5" cy="13.5" r="1"></circle></svg></div><h3 data-i18n="t20">Handover to return</h3><p data-i18n="t26">Save each rental with the customer's name, phone, destination and notes.</p></div>
+<div class="card"><div class="ic"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" style="color:var(--accent)" viewbox="0 0 24 24" width="22"><path d="M4 8h3l2-2h6l2 2h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></div><h3 data-i18n="t21">Odometer by photo</h3><p data-i18n="t27">Type the reading or take a photo. The app suggests the number and you confirm it. Fuel gauge photos are optional.</p></div>
+<div class="card"><div class="ic"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" style="color:var(--accent)" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="14" x="5" y="3"></rect><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2"></path></svg></div><h3 data-i18n="t22">Bill in LKR</h3><p data-i18n="t28">Set your daily price, included km per day and rate per extra km. It works out days, extra km, total and balance.</p></div>
+<div class="card"><div class="ic"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" style="color:var(--accent)" viewbox="0 0 24 24" width="22"><path d="M6 3h8l4 4v14H6z"></path><path d="M14 3v4h4M9 13h6M9 17h6"></path></svg></div><h3 data-i18n="t23">PDF bills in one tap</h3><p data-i18n="t29">Share a clean PDF with your name and number on it through WhatsApp, SMS or any app.</p></div>
+<div class="card"><div class="ic"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" style="color:var(--accent)" viewbox="0 0 24 24" width="22"><rect height="12" rx="2" width="18" x="3" y="6"></rect><circle cx="12" cy="12" r="2.5"></circle></svg></div><h3 data-i18n="t24">Payments and history</h3><p data-i18n="t30">Record payments, see what is still owed and look back through each month.</p></div>
+<div class="card"><div class="ic"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" style="color:var(--accent)" viewbox="0 0 24 24" width="22"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 018 0v3"></path></svg></div><h3 data-i18n="t25">Private by design</h3><p data-i18n="t31">Optional fingerprint or screen lock. Encrypted backups with a recovery phrase that only you hold.</p></div>
+</div>
+</section>
+<section>
+<h2 data-i18n="t13">How it works</h2>
+<p class="sub" data-i18n="t17">Three steps for each rental.</p>
+<div class="steps">
+<div class="step"><h3 data-i18n="t32">Hand over the car</h3><p data-i18n="t35">Enter the customer details and the starting odometer.</p></div>
+<div class="step"><h3 data-i18n="t33">Record the return</h3><p data-i18n="t36">Add the return reading and any payment received.</p></div>
+<div class="step"><h3 data-i18n="t34">Send the bill</h3><p data-i18n="t37">Check the total, then share the PDF with your customer.</p></div>
+</div>
+</section>
+<section>
+<h2 data-i18n="t14">Straight answers</h2>
+<p class="sub" data-i18n="t18">So you know what you are getting.</p>
+<div class="two">
+<div class="card"><h3 class="t" data-i18n="t38">What it is</h3>
+<ul class="tick">
+<li data-i18n="t40">Works fully offline, nothing leaves your phone unless you share it</li>
+<li data-i18n="t41">Your data stays on your phone</li>
+<li data-i18n="t42">No account, no sign-up, no subscription</li>
+<li data-i18n="t43">Made in Sri Lanka, billing in LKR</li>
+</ul></div>
+<div class="card"><h3 class="t" data-i18n="t39">What it is not</h3>
+<ul class="dash">
+<li data-i18n="t44">One car at a time, not a fleet manager</li>
+<li data-i18n="t45">No cloud sync between phones</li>
+<li data-i18n="t46">No GPS tracking</li>
+<li data-i18n="t47">No online booking or online payments</li>
+<li data-i18n="t48">Android only for now</li>
+</ul></div>
+</div>
+</section>
+<section>
+<h2 data-i18n="t15">How to install</h2>
+<p class="sub" data-i18n="t19">The app is installed straight from the file, not from Play Store, so Android asks you to allow it once.</p>
+<div class="card">
+<ol class="inst">
+<li data-i18n="t49">Tap the download button and wait for the file to finish.</li>
+<li data-i18n="t50">Open the file. If Android blocks it, tap <b>Settings</b> and allow installs from your browser.</li>
+<li data-i18n="t51">Go back and tap <b>Install</b>.</li>
+<li data-i18n="t52">Open Mile Keeper, add your name under Settings, and set your daily rate.</li>
+</ol>
+</div>
+</section>
+<div class="cta">
+<h2 data-i18n="t53">Try it on your next rental.</h2>
+<p class="sub" style="margin:0 auto 18px"><a data-i18n="t54" href="mailto:lujain888@gmail.com">Questions or feedback? Email lujain888@gmail.com.</a></p>
+<a class="btn" href="https://github.com/lujaindeen/milekeeper-site/releases/latest/download/Mile-Keeper.apk"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14"></path></svg><span data-i18n="t3">Download for Android (APK)</span></a>
+</div>
+</div>
+<footer><div class="wrap"><span data-i18n="t55">Made by Lujain Deen</span> · <a data-i18n="t56" href="mailto:lujain888@gmail.com">lujain888@gmail.com</a></div></footer>
+<script>
+const copy = {"t0": {"en": "Stop writing vehicle rental bills by hand.", "si": "වාහන කුලී බිල්පත් තවදුරටත් අතින් ලිවීමට අවශ්‍ය නැත."}, "t1": {"en": "Mile Keeper records the odometer, works out the charge in LKR and gives you a clean PDF bill to send on WhatsApp. It runs fully offline on your Android phone.", "si": "Mile Keeper මඟින් ඔබේ වාහනයේ කිලෝමීටර් මීටරයේ අගය සටහන් කර, ගාස්තුව LKR වලින් ගණනය කරයි. WhatsApp හරහා යැවීමට පැහැදිලි PDF බිල්පතක් ද සකස් කරයි. ඔබේ Android දුරකථනයේ අන්තර්ජාල සම්බන්ධතාවක් නොමැතිව වුවද එය භාවිත කළ හැකිය."}, "t2": {"en": "Download for Android (APK)", "si": "Android සඳහා ඩවුන්ලෝඩ් කරන්න (APK)"}, "t3": {"en": "Download for Android (APK)", "si": "Android සඳහා ඩවුන්ලෝඩ් කරන්න (APK)"}, "t4": {"en": "Free · Version 3.7.0 · Android 8.0 or newer · No account needed", "si": "නොමිලේ · අනුවාදය 3.7.0 · Android 8.0 හෝ ඊට පසු අනුවාදයක් · ගිණුමක් අවශ්‍ය නැත"}, "t5": {"en": "Rental Invoice", "si": "වාහන කුලී බිල්පත"}, "t6": {"en": "Days (3 x LKR 5,500)", "si": "දින (3 × LKR 5,500)"}, "t7": {"en": "Extra km (35 km x LKR 20)", "si": "අමතර කි.මී. (35 කි.මී. × LKR 20)"}, "t8": {"en": "Total", "si": "මුළු මුදල"}, "t9": {"en": "Paid", "si": "ගෙවූ මුදල"}, "t10": {"en": "PAID IN FULL", "si": "මුළු මුදලම ගෙවා ඇත"}, "t11": {"en": "Sample bill with example numbers. Rates are set by you in the app.", "si": "මෙය උදාහරණ අගයන් සහිත බිල්පතකි. ඔබේ ගාස්තු යෙදුම තුළ සකස් කළ හැකිය."}, "t12": {"en": "What it does", "si": "යෙදුමේ පහසුකම්"}, "t13": {"en": "How it works", "si": "භාවිත කරන ආකාරය"}, "t14": {"en": "Straight answers", "si": "ඔබ දැනගත යුතු කරුණු"}, "t15": {"en": "How to install", "si": "ස්ථාපනය කරන ආකාරය"}, "t16": {"en": "Built for an owner renting out one car. It does a few things and does them properly.", "si": "එක් වාහනයක් කුලියට දෙන හිමිකරුවෙකු සඳහා නිර්මාණය කළ යෙදුමකි. අවශ්‍ය කාර්යයන් කිහිපයක් නිවැරදිව ඉටු කිරීමට එය උපකාරී වේ."}, "t17": {"en": "Three steps for each rental.", "si": "සෑම කුලී වාරයක් සඳහාම සරල පියවර තුනකි."}, "t18": {"en": "So you know what you are getting.", "si": "යෙදුමෙන් කළ හැකි දේ සහ එහි සීමාවන් පැහැදිලිව දැනගන්න."}, "t19": {"en": "The app is installed straight from the file, not from Play Store, so Android asks you to allow it once.", "si": "මෙම යෙදුම ස්ථාපනය කරන්නේ Play Store හරහා නොව, APK ගොනුවෙන් සෘජුවමය. ඒ සඳහා Android පළමු වරට ඔබේ අවසරය ඉල්ලයි."}, "t20": {"en": "Handover to return", "si": "වාහනය භාර දීමේ සිට ආපසු ලැබෙන තෙක්"}, "t21": {"en": "Odometer by photo", "si": "ඡායාරූපයකින් මීටර් අගය සටහන් කිරීම"}, "t22": {"en": "Bill in LKR", "si": "LKR වලින් බිල්පත් සැකසීම"}, "t23": {"en": "PDF bills in one tap", "si": "එක් ක්ලික් කිරීමකින් PDF බිල්පතක්"}, "t24": {"en": "Payments and history", "si": "ගෙවීම් සහ පෙර වාර්තා"}, "t25": {"en": "Private by design", "si": "ඔබේ දත්තවල පෞද්ගලිකත්වය"}, "t26": {"en": "Save each rental with the customer's name, phone, destination and notes.", "si": "සෑම කුලී වාරයකටම අදාළ පාරිභෝගිකයාගේ නම, දුරකථන අංකය, ගමනාන්තය සහ අවශ්‍ය සටහන් සුරකින්න."}, "t27": {"en": "Type the reading or take a photo. The app suggests the number and you confirm it. Fuel gauge photos are optional.", "si": "මීටර් අගය ඇතුළත් කරන්න, නැතහොත් ඡායාරූපයක් ගන්න. යෙදුම හඳුනාගත් අගය පෙන්වයි. එය නිවැරදි දැයි පරීක්ෂා කර තහවුරු කරන්න. අවශ්‍ය නම් ඉන්ධන මීටරයේ ඡායාරූප ද එක් කළ හැකිය."}, "t28": {"en": "Set your daily price, included km per day and rate per extra km. It works out days, extra km, total and balance.", "si": "දෛනික ගාස්තුව, එම ගාස්තුවට දිනකට ඇතුළත් කිලෝමීටර් ගණන සහ අමතර කිලෝමීටරයක ගාස්තුව සකස් කරන්න. යෙදුම දින ගණන, අමතර කිලෝමීටර් ගණන, මුළු මුදල සහ ගෙවීමට ඉතිරි මුදල ගණනය කරයි."}, "t29": {"en": "Share a clean PDF with your name and number on it through WhatsApp, SMS or any app.", "si": "ඔබේ නම සහ දුරකථන අංකය සහිත පැහැදිලි PDF බිල්පතක් WhatsApp, SMS හෝ වෙනත් යෙදුමක් හරහා යවන්න."}, "t30": {"en": "Record payments, see what is still owed and look back through each month.", "si": "ලැබුණු ගෙවීම් සටහන් කර, තව ලැබිය යුතු මුදල පරීක්ෂා කරන්න. පෙර වාර්තා මාසය අනුව බැලිය හැකිය."}, "t31": {"en": "Optional fingerprint or screen lock. Encrypted backups with a recovery phrase that only you hold.", "si": "අවශ්‍ය නම් ඇඟිලි සලකුණ හෝ දුරකථනයේ තිර අගුල භාවිතයෙන් යෙදුම අගුලු දැමිය හැකිය. උපස්ථ ගොනු සංකේතනය කර ආරක්ෂා කර ඇත. ඒවා නැවත ලබා ගැනීමට අවශ්‍ය ප්‍රතිසාධන වචන පෙළ ඔබ සතුව පමණක් පවතී."}, "t32": {"en": "Hand over the car", "si": "වාහනය භාර දෙන්න"}, "t33": {"en": "Record the return", "si": "ආපසු ලැබීම සටහන් කරන්න"}, "t34": {"en": "Send the bill", "si": "බිල්පත යවන්න"}, "t35": {"en": "Enter the customer details and the starting odometer.", "si": "පාරිභෝගිකයාගේ විස්තර සහ වාහනය භාර දෙන විට ඇති මීටර් අගය ඇතුළත් කරන්න."}, "t36": {"en": "Add the return reading and any payment received.", "si": "වාහනය ආපසු ලැබෙන විට ඇති මීටර් අගය සහ ලැබුණු ගෙවීම් ඇතුළත් කරන්න."}, "t37": {"en": "Check the total, then share the PDF with your customer.", "si": "මුළු මුදල පරීක්ෂා කර, PDF බිල්පත පාරිභෝගිකයාට යවන්න."}, "t38": {"en": "What it is", "si": "ඇතුළත් පහසුකම්"}, "t39": {"en": "What it is not", "si": "යෙදුමේ සීමාවන්"}, "t40": {"en": "Works fully offline, nothing leaves your phone unless you share it", "si": "අන්තර්ජාල සම්බන්ධතාවක් නොමැතිව භාවිත කළ හැකිය. ඔබ බෙදාගන්නේ නම් පමණක් දත්ත දුරකථනයෙන් පිටතට යැවේ."}, "t41": {"en": "Your data stays on your phone", "si": "ඔබේ දත්ත ඔබේ දුරකථනයේම ගබඩා වේ."}, "t42": {"en": "No account, no sign-up, no subscription", "si": "ගිණුමක් සෑදීම හෝ ලියාපදිංචි වීම අවශ්‍ය නැත. දායකත්ව ගාස්තුවක් ද නැත."}, "t43": {"en": "Made in Sri Lanka, billing in LKR", "si": "ශ්‍රී ලංකාවේ නිර්මාණය කළ යෙදුමකි. බිල්පත් සකස් කරන්නේ LKR වලිනි."}, "t44": {"en": "One car at a time, not a fleet manager", "si": "වරකට එක් වාහනයක් සඳහා පමණි. වාහන සමූහයක් කළමනාකරණය කිරීමට පහසුකම් නැත."}, "t45": {"en": "No cloud sync between phones", "si": "දුරකථන අතර cloud sync පහසුකම නැත."}, "t46": {"en": "No GPS tracking", "si": "GPS මඟින් වාහනයේ පිහිටීම නිරීක්ෂණය කිරීමට පහසුකම් නැත."}, "t47": {"en": "No online booking or online payments", "si": "අන්තර්ජාලය හරහා වෙන්කරවා ගැනීම් හෝ ගෙවීම් කිරීමට පහසුකම් නැත."}, "t48": {"en": "Android only for now", "si": "දැනට Android සඳහා පමණි."}, "t49": {"en": "Tap the download button and wait for the file to finish.", "si": "ඩවුන්ලෝඩ් බොත්තම ක්ලික් කර, ගොනුව සම්පූර්ණයෙන් ඩවුන්ලෝඩ් වන තෙක් රැඳී සිටින්න."}, "t50": {"en": "Open the file. If Android blocks it, tap Settings and allow installs from your browser.", "si": "ගොනුව විවෘත කරන්න. Android ස්ථාපනය අවහිර කළහොත්, Settings වෙත ගොස් ඔබේ වෙබ් බ්‍රවුසරය හරහා යෙදුම් ස්ථාපනය කිරීමට අවසර දෙන්න."}, "t51": {"en": "Go back and tap Install .", "si": "ආපසු ගොස් Install බොත්තම ක්ලික් කරන්න."}, "t52": {"en": "Open Mile Keeper, add your name under Settings, and set your daily rate.", "si": "Mile Keeper විවෘත කර, Settings යටතේ ඔබේ නම ඇතුළත් කරන්න. ඉන්පසු දෛනික ගාස්තුව සකස් කරන්න."}, "t53": {"en": "Try it on your next rental.", "si": "ඔබේ ඊළඟ කුලී වාරයේදී භාවිත කර බලන්න."}, "t54": {"en": "Questions or feedback? Email lujain888@gmail.com.", "si": "ප්‍රශ්න හෝ අදහස් තිබේ නම්, lujain888@gmail.com වෙත ඊමේල් පණිවිඩයක් යවන්න."}, "t55": {"en": "Made by Lujain Deen", "si": "නිර්මාණය: Lujain Deen"}, "t56": {"en": "lujain888@gmail.com", "si": "lujain888@gmail.com"}};
+function setLanguage(lang){
+ if(lang!=='si') lang='en';
+ document.documentElement.lang=lang;
+ document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=copy[el.dataset.i18n][lang]);
+ document.querySelectorAll('[data-lang]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.lang===lang)));
+ document.querySelector('.bill').setAttribute('aria-label',lang==='si'?'උදාහරණ වාහන කුලී බිල්පත':'Sample bill');
+ document.title=lang==='si'?'Mile Keeper - අන්තර්ජාලය නොමැතිව වාහන කුලී බිල්පත්':'Mile Keeper - rental bills for one car, offline';
+}
+document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.lang)));
+setLanguage(new URLSearchParams(location.search).get('lang')==='si'?'si':'en');
+</script></body>
+</html>
